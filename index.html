@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Alley - ASCII Art Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+</head>
+<body>
+    <div id="intro-screen">
+        <div class="intro-content">
+            <pre id="intro-logo" class="intro-logo"></pre>
+            <div id="loading-bar-container">
+                <div id="loading-bar"></div>
+            </div>
+            <p id="intro-subtitle" class="intro-subtitle">The ASCII Art Studio</p>
+        </div>
+    </div>
+
+    <canvas id="bg-canvas"></canvas>
+    <div id="scanline-overlay"></div>
+
+    <div id="main-container" class="main-container">
+        <header>
+            <h1>Art Alley</h1>
+        </header>
+
+        <div class="controls" id="main-controls">
+            <button id="toggle-controls-btn" class="toggle-controls-btn" title="Toggle Controls UI">
+                <svg viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"/></svg>
+            </button>
+            <div class="controls-inner">
+                <div class="control-section">
+                    <div class="control-section-title">Tools</div>
+                    <div class="control-group-wrapper">
+                        <button class="tool-button active" id="pencil-tool" title="Pencil"><svg viewBox="0 0 24 24"><path d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" /></svg><span>Pencil</span></button>
+                        <button class="tool-button" id="eraser-tool" title="Eraser"><svg viewBox="0 0 24 24"><path d="M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53V20.53L11.96,20.57L2.81,11.41C2.03,10.63 2.03,9.37 2.81,8.59L7.76,3.64C8.54,2.86 9.8,2.86 10.59,3.64L12,5.05L13.41,3.64C14.2,2.86 15.46,2.86 16.24,3.56M10.59,6.46L7.05,2.93C6.66,2.54 6.03,2.54 5.64,2.93L2.93,5.64C2.54,6.03 2.54,6.66 2.93,7.05L12,16.12L21.07,7.05C21.46,6.66 21.46,6.03 21.07,5.64L18.36,2.93C17.97,2.54 17.34,2.54 16.95,2.54L13.41,6.46L12,7.88L10.59,6.46Z" /></svg><span>Eraser</span></button>
+                        <button class="tool-button" id="fill-tool" title="Fill"><svg viewBox="0 0 24 24"><path d="M17.63,5.84C17.27,5.47 16.64,5.47 16.27,5.84L6.27,15.84C5.9,16.2 5.9,16.83 6.27,17.2L7.45,18.38C7.81,18.75 8.44,18.75 8.82,18.38L18.82,8.38C19.18,8.02 19.18,7.39 18.82,7.02L17.63,5.84M22,2V11.5C22,12.33 21.33,13 20.5,13H15.67L13.09,15.59C12.7,15.97 12.07,15.97 11.68,15.59L9.11,13H3.5C2.67,13 2,12.33 2,11.5V2H22Z" /></svg><span>Fill</span></button>
+                        <button class="tool-button" id="text-tool" title="Text Tool"><svg viewBox="0 0 24 24"><path d="M9.6,14L12,7.7L14.4,14M11,5L5.5,19H7.7L8.8,16H15.2L16.3,19H18.5L13,5H11Z" /></svg><span>Text</span></button>
+                        <button class="tool-button" id="select-tool" title="Select"><svg viewBox="0 0 24 24"><path d="M2,2H8V4H4V8H2V2M22,2V8H20V4H16V2H22M2,16H4V20H8V22H2V16M22,22H16V20H20V16H22V22M6,6V18H18V6H6Z" /></svg><span>Select</span></button>
+                        <button class="tool-button" id="eyedropper-tool" title="Eyedropper"><svg viewBox="0 0 24 24"><path fill="currentColor" d="m19.37 8.15l-4.24-4.24a2.12 2.12 0 0 0-3 0L3 13.07V17h3.93L16.09 7.84a2.12 2.12 0 0 0 0-3l-1.06-1.06a2.12 2.12 0 0 0-3 0L3 12.93V19a2 2 0 0 0 2 2h6.07l-2.12-2.12L13.5 14.3l3.54 3.54-5.66 5.66H21v-7.93l-1.63-1.62ZM17.94 6.41l-1.07-1.06a.5.5 0 0 0-.7 0L15.1 6.41l1.42 1.42 1.42-1.42a.5.5 0 0 0 0-.7Z"/></svg><span>Eyedropper</span></button>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <div class="control-section-title">Style & Palette</div>
+                    <div class="control-group-wrapper">
+                        <div class="control-group">
+                            <label for="char-input">Char:</label>
+                            <input type="text" id="char-input" maxlength="1" value="#">
+                        </div>
+                        <div class="control-group">
+                            <input type="color" id="color-picker" value="#00f7ff">
+                        </div>
+                        <button class="action-button" id="rainbow-mode-btn">Rainbow Mode: OFF</button>
+                    </div>
+                    <div class="char-palette" id="char-palette"></div>
+                    <div id="color-preset-container" class="color-preset-container">
+                        <div class="control-section-title">Color Presets</div>
+                        <div id="preset-buttons" class="preset-buttons"></div>
+                        <div id="preset-palette" class="preset-palette"></div>
+                    </div>
+                </div>
+
+                <div class="control-section hidden" id="selection-actions">
+                    <div class="control-section-title">Selection Actions</div>
+                    <div class="control-group-wrapper">
+                        <button class="action-button" id="flip-h-btn" title="Flip Horizontal"><svg viewBox="0 0 24 24"><path d="M15,21V3H17V21H15M5,21V3H7V21H5M3,21V3H1V21H3M21,3V21H19V3H21M9,3L13,7L9,11V3M9,21V13L13,17L9,21Z"/></svg><span>Flip H</span></button>
+                        <button class="action-button" id="flip-v-btn" title="Flip Vertical"><svg viewBox="0 0 24 24"><path d="M3,15H21V17H3V15M3,5H21V7H3V5M3,3H21V1H3V3M3,21V19H21V21H3M7,9L11,13H3L7,9M21,9L17,13H9L13,9H21Z"/></svg><span>Flip V</span></button>
+                        <button class="action-button" id="copy-selection-btn" title="Copy Selection"><svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg><span>Copy</span></button>
+                        <button class="action-button" id="paste-selection-btn" title="Paste Selection" disabled><svg viewBox="0 0 24 24"><path d="M19,20H5V4H7V2H17V4H19M12,2A3,3 0 0,1 15,5V6H9V5A3,3 0 0,1 12,2M17,8V20H19V8M5,8V20H7V8H5Z"/></svg><span>Paste</span></button>
+                        <button class="action-button" id="delete-selection-btn" title="Delete Selection"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/></svg><span>Delete</span></button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Animation Controls</div>
+                    <div class="control-group-wrapper">
+                        <button class="action-button" id="play-btn"><svg viewBox="0 0 24 24"><path d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>Play</button>
+                        <button class="action-button" id="add-frame-btn"><svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>+ Frame</button>
+                        <button class="action-button" id="copy-frame-btn"><svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" /></svg>Copy Frame</button>
+                        <button class="action-button" id="delete-frame-btn"><svg viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>- Frame</button>
+                        <div class="control-group">
+                            <label for="fps-input">FPS:</label>
+                            <input type="range" id="fps-input" min="1" max="24" value="8">
+                            <span id="fps-display">8</span>
+                        </div>
+                        <span id="frame-counter">Frame: 1 / 1</span>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Utility Actions</div>
+                    <div class="control-group-wrapper">
+                        <button class="action-button" id="undo-btn" disabled><svg viewBox="0 0 24 24"><path d="M12.5,8C9.82,8 7.29,8.77 5.09,10.15L3.3,8.36L2,9.66L4.7,12.36C4.07,13.88 3.82,15.5 3.82,17.18H5.82C5.82,15.65 6.13,14.19 6.74,12.87L9.36,10.25C10.22,9.44 11.31,9 12.5,9C14.71,9 16.63,10.66 17.18,12.82L19.18,12.82C18.63,9.54 15.81,7 12.5,7V4L7.5,9L12.5,14V11C15.71,11 18.53,13.46 19.18,16.82L21.18,16.82C20.63,13.54 17.81,11 14.5,11V14L19.5,9L14.5,4Z" /></svg>Undo</button>
+                        <button class="action-button" id="redo-btn" disabled><svg viewBox="0 0 24 24"><path d="M12.5,8C15.18,8 17.71,8.77 19.91,10.15L21.7,8.36L23,9.66L20.3,12.36C20.93,13.88 21.18,15.5 21.18,17.18H19.18C19.18,15.65 18.87,14.19 18.26,12.87L15.64,10.25C14.78,9.44 13.69,9 12.5,9C10.29,9 8.37,10.66 7.82,12.82L5.82,12.82C6.37,9.54 9.19,7 12.5,7V4L17.5,9L12.5,14V11C9.29,11 6.47,13.46 5.82,16.82L3.82,16.82C4.37,13.54 7.19,11 10.5,11V14L5.5,9L10.5,4Z" /></svg>Redo</button>
+                        <button class="action-button" id="clear-btn"><svg viewBox="0 0 24 24"><path d="M19,13H5V11H19M12,2A10,10 0 0,0 4,4V20A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>Clear</button>
+                        <button class="action-button" id="grid-toggle-btn"><svg viewBox="0 0 24 24"><path d="M22 10V14H12V10H22M10 10V14H2V10H10M22 4V8H12V4H22M10 4V8H2V4H10M22 16V20H12V16H22M10 16V20H2V16H10Z" /></svg>Grid: ON</button>
+                        <button class="action-button" id="toggle-background-btn"><svg viewBox="0 0 24 24"><path d="M17.66,2.34L12,8L6.34,2.34L2.34,6.34L8,12L2.34,17.66L6.34,21.66L12,16L17.66,21.66L21.66,17.66L16,12L21.66,6.34L17.66,2.34Z" /></svg>BG</button>
+                        <button class="action-button" id="toggle-theme-btn" title="Toggle Theme"><svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 1 0 12 22A10 10 0 0 0 12 2M12 4A8 8 0 0 1 12 20V4Z"/></svg>Theme</button>
+                        <div class="control-group zoom-controls">
+                            <button class="action-button" id="zoom-in-btn"><svg viewBox="0 0 24 24"><path d="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16C5.91,16 3,13.09 3,9.5C3,5.91 5.91,3 9.5,3C13.09,3 16,5.91 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12.09,14 14,11.91 14,9.5C14,7.09 12.09,5 9.5,5C6.91,5 5,7.09 5,9.5C5,11.91 6.91,14 9.5,14M12,10H10V12H9V10H7V9H9V7H10V9H12V10Z" /></svg>Zoom In</button>
+                            <button class="action-button" id="zoom-out-btn"><svg viewBox="0 0 24 24"><path d="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16C5.91,16 3,13.09 3,9.5C3,5.91 5.91,3 9.5,3C13.09,3 16,5.91 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12.09,14 14,11.91 14,9.5C14,7.09 12.09,5 9.5,5C6.91,5 5,7.09 5,9.5C5,11.91 6.91,14 9.5,14M7,9H12V10H7V9Z" /></svg>Zoom Out</button>
+                        </div>
+                        <button class="action-button" id="save-btn"><svg viewBox="0 0 24 24"><path d="M15,9H5V5H15M12,17A3,3 0 0,0 15,14A3,3 0 0,0 12,11A3,3 0 0,0 9,14A3,3 0 0,0 12,17M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" /></svg>Save</button>
+                        <button class="action-button" id="load-btn"><svg viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,10A3,3 0 0,0 9,13A3,3 0 0,0 12,16A3,3 0 0,0 15,13A3,3 0 0,0 12,10Z" /></svg>Load</button>
+                        <button class="action-button" id="export-btn"><svg viewBox="0 0 24 24"><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>Export .txt</button>
+                    </div>
+                </div>
+                <button class="action-button" id="challenge-mode-btn"><svg viewBox="0 0 24 24"><path d="M12,2C6.48,2,2,6.48,2,12S4.48,10,10,10,10-4.48,10-10S17.52,2,12,2ZM13,17H11V11H13V17ZM13,9H11V7H13V9Z" /></svg>Challenge Mode</button>
+            </div>
+        </div>
+        
+        <div id="challenge-bar" class="hidden">
+            <span id="challenge-prompt"></span>
+            <div class="control-group" id="challenge-trace-controls">
+                <span>Score: <span id="challenge-score">0%</span></span>
+                <span>Next Char: <span id="challenge-char-display">#</span></span>
+                <button id="hint-btn" class="action-button"><svg viewBox="0 0 24 24"><path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12A10,10,0,0,0,12,2ZM13,19H11V17H13V19ZM13,15H11V7H13V15Z" /></svg>Hint</button>
+                <button id="show-solution-btn" class="action-button"><svg viewBox="0 0 24 24"><path d="M12,4.5C7,4.5,2.73,7.61,1,12C1.73,4.39,6,7.5,11,7.5S9.27-3.11,11-7.5C-1.73-4.39-6-7.5-11-7.5ZM12,17A5,5,0,0,1,7,12A5,5,0,0,1,12,7A5,5,0,0,1,17,12A5,5,0,0,1,12,17ZM12,9A3,3,0,0,0,9,12A3,3,0,0,0,12,15A3,3,0,0,0,15,12A3,3,0,0,0,12,9Z" /></svg>Show Solution</button>
+            </div>
+             <div class="control-group" id="challenge-creative-controls">
+                <button id="show-examples-btn" class="action-button"><svg viewBox="0 0 24 24"><path d="M12,4.5C7,4.5,2.73,7.61,1,12C1.73,4.39,6,7.5,11,7.5S9.27-3.11,11-7.5C-1.73-4.39-6-7.5-11-7.5ZM12,17A5,5,0,0,1,7,12A5,5,0,0,1,12,7A5,5,0,0,1,17,12A5,5,0,0,1,12,17ZM12,9A3,3,0,0,0,9,12A3,3,0,0,0,12,15A3,3,0,0,0,15,12A3,3,0,0,0,12,9Z" /></svg>Show Examples</button>
+            </div>
+            <div class="control-group">
+                <button id="new-challenge-btn" class="action-button"><svg viewBox="0 0 24 24"><path d="M12,2C6.48,2,2,6.48,2,12S4.48,10,10,10,10-4.48,10-10S17.52,2,12,2ZM13,17H11V11H13V17ZM13,9H11V7H13V9Z" /></svg>New Challenge</button>
+                <button class="action-button" id="quit-challenge-btn"><svg viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>Quit</button>
+            </div>
+        </div>
+
+        <div id="canvas-container">
+            <div id="canvas-wrapper">
+                <div id="challenge-trace-canvas" class="grid-canvas"></div>
+                <div id="main-canvas" class="grid-canvas"></div>
+                <div id="selection-box" class="hidden"></div>
+                <div id="text-input-overlay" class="hidden">
+                    <input type="text" id="text-tool-input" />
+                    <div id="text-tool-caret"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="frames-container"></div>
+    </div>
+    
+    <div id="feedback-message" class="hidden"></div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button class="action-button" id="modal-confirm-btn">OK</button>
+                <button class="action-button hidden" id="modal-cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Art Alley. Unleash your ASCII creativity.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
